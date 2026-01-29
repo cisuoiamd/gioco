@@ -12,7 +12,7 @@ class Barra:
 
         dimensione_barra = self.percentuale * 150
 
-        arcade.draw_rect_filled(arcade.rect.XYWH(x, y, 150, 10), arcade.color.DARK_GRAY)
+        arcade.draw_rect_filled(arcade.rect.XYWH(x, y, 150, 10), arcade.color.BLACK)
         arcade.draw_rect_filled(arcade.rect.XYWH(x, y, dimensione_barra, 7), arcade.color.GREEN)
 
 
