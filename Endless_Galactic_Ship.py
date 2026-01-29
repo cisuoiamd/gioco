@@ -19,16 +19,14 @@ class GameView(arcade.View):
         self.background = None
         self.player_sprite = None
         self.barra = None
-        
-        self.setup()  # Setup iniziale
+        self.setup()
 
     def setup(self):
-        """Resetta il gioco (chiamato in __init__ e per reset)"""
         self.background = arcade.load_texture("./assets/sfondo.png")
         
         self.player_sprite = arcade.Sprite("./assets/shooter.png", scale=0.5)
         self.player_sprite.center_x = 100
-        self.player_sprite.center_y = HEIGHT // 2  # 300
+        self.player_sprite.center_y = HEIGHT // 2  
         self.player_list.clear()
         self.player_list.append(self.player_sprite)
         self.barra = Health_bar.Barra(self.player_sprite, 0.7)
@@ -36,13 +34,8 @@ class GameView(arcade.View):
         self.bullet_list.clear()
         self.change_x = 0
         self.change_y = 0
-        # Nota: assumo che Barra resetti percentuale=1.0 internamente
-
     def on_show_view(self):
-        """Chiamato ogni volta che la view è mostrata (es. resume da pausa)"""
-        # Non resettare nulla qui per preservare stato
         pass
-
     def on_draw(self):
         self.clear()
         
@@ -54,9 +47,7 @@ class GameView(arcade.View):
         self.player_list.draw()
         self.bullet_list.draw()
         self.barra.on_draw()
-
-        # Tooltip per pausa
-        arcade.draw_text("Premi ESC per pausare",
+        arcade.draw_text("Press ESC to pause",
                          self.window.width // 2,
                          self.window.height - 50,
                          arcade.color.WHITE,
@@ -93,7 +84,6 @@ class GameView(arcade.View):
             self.change_x = -self.player_speed
         elif key == arcade.key.D:
             self.change_x = self.player_speed
-        # Pausa
         if key == arcade.key.ESCAPE:
             pause = PauseView(self)
             self.window.show_view(pause)
@@ -114,12 +104,10 @@ class PauseView(arcade.View):
         self.game_view = game_view
 
     def on_show_view(self):
-        self.window.background_color = arcade.color.ORANGE  # Colore sfondo pausa (opzionale)
+        self.window.background_color = arcade.color.ORANGE  
 
     def on_draw(self):
         self.clear()
-        
-        # Disegna la scena del gioco congelata
         arcade.draw_texture_rect(
             self.game_view.background,
             rect=arcade.LBWH(0, 0, self.window.width, self.window.height)
@@ -128,8 +116,6 @@ class PauseView(arcade.View):
         self.game_view.player_list.draw()
         self.game_view.bullet_list.draw()
         self.game_view.barra.on_draw()
-        
-        # Overlay semitrasparente scuro su tutto
         overlay_color = arcade.color.BLACK[:3] + (128,)
         arcade.draw_lrbt_rectangle_filled(
             left=0,
@@ -138,21 +124,19 @@ class PauseView(arcade.View):
             top=self.window.height,
             color=overlay_color
         )
-        
-        # Testi
-        arcade.draw_text("PAUSA",
+        arcade.draw_text("PAUSE",
                          self.window.width / 2,
                          self.window.height / 2 + 50,
                          arcade.color.WHITE,
                          font_size=50,
                          anchor_x="center")
-        arcade.draw_text("Premi ESC per riprendere",
+        arcade.draw_text("Press ESC to continue",
                          self.window.width / 2,
                          self.window.height / 2,
                          arcade.color.WHITE,
                          font_size=20,
                          anchor_x="center")
-        arcade.draw_text("Premi INVIO per resettare",
+        arcade.draw_text("Press ENTER to reset",
                          self.window.width / 2,
                          self.window.height / 2 - 30,
                          arcade.color.WHITE,
@@ -161,10 +145,8 @@ class PauseView(arcade.View):
 
     def on_key_press(self, key, _modifiers):
         if key == arcade.key.ESCAPE:
-            # Riprendi gioco (stato preservato)
             self.window.show_view(self.game_view)
         elif key == arcade.key.ENTER:
-            # Reset: nuova GameView fresca
             game = GameView()
             self.window.show_view(game)
 
