@@ -1,5 +1,5 @@
 import arcade
-
+import Barra
 class MyGame(arcade.Window):
 
     def __init__(self):
@@ -26,6 +26,8 @@ class MyGame(arcade.Window):
         self.player_sprite.center_x = 100
         self.player_sprite.center_y = self.height // 2
         self.player_list.append(self.player_sprite)
+        self.barra = Barra.Barra(self.player_sprite, 0.7)
+
 
     def on_draw(self):
         self.clear()
@@ -38,9 +40,12 @@ class MyGame(arcade.Window):
         self.player_list.draw()
         self.bullet_list.draw()
 
+        self.barra.on_draw()
+
     def on_update(self, delta_time):
         self.player_sprite.center_x += self.change_x
         self.player_sprite.center_y += self.change_y
+        self.barra.percentuale -= 0.001
         
         self.bullet_list.update()
         
