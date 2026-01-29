@@ -57,7 +57,6 @@ class GameView(arcade.View):
     def on_update(self, delta_time):
         self.player_sprite.center_x += self.change_x
         self.player_sprite.center_y += self.change_y
-        self.barra.percentuale -= 0.001
         
         self.bullet_list.update()
         
@@ -87,7 +86,7 @@ class GameView(arcade.View):
         if key == arcade.key.ESCAPE:
             pause = PauseView(self)
             self.window.show_view(pause)
-            
+
     def on_key_release(self, key, modifiers):
         if key == arcade.key.W or key == arcade.key.S:
             self.change_y = 0
