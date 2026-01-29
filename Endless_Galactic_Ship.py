@@ -1,10 +1,16 @@
 import arcade
 import Health_bar
-class MyGame(arcade.Window):
 
+def main():
+    window = arcade.Window("Endless Galactic Ship", fullscreen=True)
+    game_view = GameView()
+    window.show_view(game_view)
+    arcade.run()
+
+
+class GameView(arcade.View):
     def __init__(self):
-        super().__init__(900, 600, "Endless Galactic Ship", fullscreen=True)
-        
+        super().__init__()
         self.player_list = arcade.SpriteList()
         self.bullet_list = arcade.SpriteList()
         
@@ -16,31 +22,47 @@ class MyGame(arcade.Window):
         
         self.background = None
         self.player_sprite = None
+        self.barra = None
         
-        self.setup()
+        self.setup()  # Setup iniziale
 
     def setup(self):
         self.background = arcade.load_texture("./assets/sfondo.png")
         
         self.player_sprite = arcade.Sprite("./assets/shooter.png", scale=0.5)
         self.player_sprite.center_x = 100
-        self.player_sprite.center_y = self.height // 2
+        self.player_sprite.center_y = HEIGHT // 2 
+        self.player_list.clear()
         self.player_list.append(self.player_sprite)
         self.barra = Health_bar.Barra(self.player_sprite, 0.7)
+        
+        self.bullet_list.clear()
+        self.change_x = 0
+        self.change_y = 0
+        
 
+    def on_show_view(self):
+        pass
 
     def on_draw(self):
         self.clear()
         
         arcade.draw_texture_rect(
             self.background,
-            rect=arcade.LBWH(0, 0, self.width, self.height)
+            rect=arcade.LBWH(0, 0, self.window.width, self.window.height)
         )
         
         self.player_list.draw()
         self.bullet_list.draw()
-
         self.barra.on_draw()
+
+        # Tooltip per pausa
+        arcade.draw_text("Press ESC to pause",
+                         self.window.width // 2,
+                         self.window.height - 50,
+                         arcade.color.WHITE,
+                         font_size=20,
+                         anchor_x="center")
 
     def on_update(self, delta_time):
         self.player_sprite.center_x += self.change_x
@@ -50,14 +72,14 @@ class MyGame(arcade.Window):
         self.bullet_list.update()
         
         for bullet in self.bullet_list:
-            if bullet.left > self.width:
+            if bullet.left > self.window.width:
                 bullet.remove_from_sprite_lists()
 
     def shoot(self):
         bullet = arcade.Sprite("./assets/laser.png", scale=0.17)
         
-        bullet.center_x = self.player_sprite.center_x +90
-        bullet.center_y = self.player_sprite.center_y +15
+        bullet.center_x = self.player_sprite.center_x + 90
+        bullet.center_y = self.player_sprite.center_y + 15
         bullet.change_x = self.bullet_speed
         bullet.change_y = 0
         
@@ -72,6 +94,9 @@ class MyGame(arcade.Window):
             self.change_x = -self.player_speed
         elif key == arcade.key.D:
             self.change_x = self.player_speed
+        if key == arcade.key.ESCAPE:
+            pause = PauseView(self)
+            self.window.show_view(pause)
 
     def on_key_release(self, key, modifiers):
         if key == arcade.key.W or key == arcade.key.S:
@@ -82,19 +107,61 @@ class MyGame(arcade.Window):
     def on_mouse_press(self, x, y, button, modifiers):
         if button == arcade.MOUSE_BUTTON_LEFT:
             self.shoot()
-class MenuView(arcade.View):
+
+class PauseView(arcade.View):
+    def __init__(self, game_view):
+        super().__init__()
+        self.game_view = game_view
+
     def on_show_view(self):
-        self.window.background_color = arcade.color.WHITE
+        self.window.background_color = arcade.color.ORANGE
 
     def on_draw(self):
         self.clear()
-        arcade.draw_text("Menu Screen", WIDTH / 2, HEIGHT / 2,
-                         arcade.color.BLACK, font_size=50, anchor_x="center")
-        arcade.draw_text("Click to advance.", WIDTH / 2, HEIGHT / 2 - 75,
-                         arcade.color.GRAY, font_size=20, anchor_x="center")
-def main():
-    game = MyGame()
-    arcade.run()
+    
+        arcade.draw_texture_rect(
+            self.game_view.background,
+            rect=arcade.LBWH(0, 0, self.window.width, self.window.height)
+        )
+        
+        self.game_view.player_list.draw()
+        self.game_view.bullet_list.draw()
+        self.game_view.barra.on_draw()
+        
+        overlay_color = arcade.color.BLACK[:3] + (128,)
+        arcade.draw_lrbt_rectangle_filled(
+            left=0,
+            right=self.window.width,
+            bottom=0,
+            top=self.window.height,
+            color=overlay_color
+        )
+        
+        # Testi
+        arcade.draw_text("PAUSA",
+                         self.window.width / 2,
+                         self.window.height / 2 + 50,
+                         arcade.color.WHITE,
+                         font_size=50,
+                         anchor_x="center")
+        arcade.draw_text("Premi ESC per riprendere",
+                         self.window.width / 2,
+                         self.window.height / 2,
+                         arcade.color.WHITE,
+                         font_size=20,
+                         anchor_x="center")
+        arcade.draw_text("Premi INVIO per resettare",
+                         self.window.width / 2,
+                         self.window.height / 2 - 30,
+                         arcade.color.WHITE,
+                         font_size=20,
+                         anchor_x="center")
 
+    def on_key_press(self, key, _modifiers):
+        if key == arcade.key.ESCAPE:
+            self.window.show_view(self.game_view)
+        elif key == arcade.key.ENTER:
+            game = GameView()
+            self.window.show_view(game)
 if __name__ == "__main__":
     main()
