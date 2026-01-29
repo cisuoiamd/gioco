@@ -1,5 +1,5 @@
 import arcade
-import Barra
+import Health_bar
 class MyGame(arcade.Window):
 
     def __init__(self):
@@ -26,7 +26,7 @@ class MyGame(arcade.Window):
         self.player_sprite.center_x = 100
         self.player_sprite.center_y = self.height // 2
         self.player_list.append(self.player_sprite)
-        self.barra = Barra.Barra(self.player_sprite, 0.7)
+        self.barra = Health_bar.Barra(self.player_sprite, 0.7)
 
 
     def on_draw(self):
