@@ -87,7 +87,7 @@ class GameView(arcade.View):
         if key == arcade.key.ESCAPE:
             pause = PauseView(self)
             self.window.show_view(pause)
-
+            
     def on_key_release(self, key, modifiers):
         if key == arcade.key.W or key == arcade.key.S:
             self.change_y = 0
