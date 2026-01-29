@@ -82,7 +82,16 @@ class MyGame(arcade.Window):
     def on_mouse_press(self, x, y, button, modifiers):
         if button == arcade.MOUSE_BUTTON_LEFT:
             self.shoot()
+class MenuView(arcade.View):
+    def on_show_view(self):
+        self.window.background_color = arcade.color.WHITE
 
+    def on_draw(self):
+        self.clear()
+        arcade.draw_text("Menu Screen", WIDTH / 2, HEIGHT / 2,
+                         arcade.color.BLACK, font_size=50, anchor_x="center")
+        arcade.draw_text("Click to advance.", WIDTH / 2, HEIGHT / 2 - 75,
+                         arcade.color.GRAY, font_size=20, anchor_x="center")
 def main():
     game = MyGame()
     arcade.run()
