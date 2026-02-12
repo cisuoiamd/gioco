@@ -1,6 +1,6 @@
 import arcade
 import Health_bar
-
+import nemico
 WIDTH = 900
 HEIGHT = 600
 
@@ -24,13 +24,13 @@ class GameView(arcade.View):
 
     def setup(self):
         self.background = arcade.load_texture("./assets/sfondo.png")
-        self.enemy_list = arcade.Sprite("./assets/nemico.png")
         self.player_sprite = arcade.Sprite("./assets/shooter.png", scale=0.5)
         self.player_sprite.center_x = 100
         self.player_sprite.center_y = HEIGHT // 2  
         self.player_list.clear()
         self.player_list.append(self.player_sprite)
         self.barra = Health_bar.Barra(self.player_sprite, 0.7)
+        self.enemy_list = arcade.SpriteList()
         
         self.bullet_list.clear()
         self.change_x = 0
@@ -39,7 +39,7 @@ class GameView(arcade.View):
         pass
     def on_draw(self):
         self.clear()
-        
+        self.enemy_list.draw()
         arcade.draw_texture_rect(
             self.background,
             rect=arcade.LBWH(0, 0, self.window.width, self.window.height)
