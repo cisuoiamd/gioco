@@ -17,13 +17,14 @@ class GameView(arcade.View):
         self.change_y = 0
         
         self.background = None
+        self.enemy_list= None
         self.player_sprite = None
         self.barra = None
         self.setup()
 
     def setup(self):
         self.background = arcade.load_texture("./assets/sfondo.png")
-        
+        self.enemy_list = arcade.Sprite("./assets/nemico.png")
         self.player_sprite = arcade.Sprite("./assets/shooter.png", scale=0.5)
         self.player_sprite.center_x = 100
         self.player_sprite.center_y = HEIGHT // 2  
