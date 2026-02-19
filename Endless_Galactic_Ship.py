@@ -3,7 +3,7 @@ import Health_bar
 from Nemicobase import Enemy
 
 WIDTH = 900
-HEIGHT = 900
+HEIGHT = 800
 
 class GameView(arcade.View):
     def __init__(self):
