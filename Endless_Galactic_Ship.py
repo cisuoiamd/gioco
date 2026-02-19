@@ -12,6 +12,9 @@ class GameView(arcade.View):
         self.bullet_list = arcade.SpriteList()
         self.enemy_list = arcade.SpriteList()
         
+        self.shoot_cooldown = 0.4          
+        self.shoot_timer = 0
+        
         self.player_speed = 6
         self.bullet_speed = 12
         
@@ -23,7 +26,7 @@ class GameView(arcade.View):
         self.barra = None
         
         self.enemy_spawn_timer = 0
-        self.enemy_spawn_interval = 0.5
+        self.enemy_spawn_interval = 0.4
         self.enemy_speed = 6
         self.lives = 1.0
         self.score = 0
@@ -79,7 +82,8 @@ class GameView(arcade.View):
     def on_update(self, delta_time):
         self.player_sprite.center_x += self.change_x
         self.player_sprite.center_y += self.change_y
-        
+        if self.shoot_timer > 0:
+            self.shoot_timer -= delta_time
         self.bullet_list.update()
         for bullet in self.bullet_list[:]:
             if bullet.left > self.window.width:
@@ -108,6 +112,9 @@ class GameView(arcade.View):
         self.barra.percentuale = self.lives
 
     def shoot(self):
+        if self.shoot_timer > 0:
+            return      
+        self.shoot_timer = self.shoot_cooldown  
         bullet = arcade.Sprite("./assets/laser.png", scale=0.17)
         bullet.center_x = self.player_sprite.center_x + 90
         bullet.center_y = self.player_sprite.center_y + 15
@@ -129,6 +136,9 @@ class GameView(arcade.View):
             self.window.show_view(pause)
         if key == arcade.key.SPACE:
             self.shoot()
+        if key == arcade.key.SPACE:
+            if self.shoot_timer <= 0:
+                self.shoot()
     def on_key_release(self, key, modifiers):
         if key == arcade.key.W or key == arcade.key.S:
             self.change_y = 0
@@ -136,7 +146,8 @@ class GameView(arcade.View):
             self.change_x = 0
     def on_mouse_press(self, x, y, button, modifiers):
         if button == arcade.MOUSE_BUTTON_LEFT:
-            self.shoot()
+            if self.shoot_timer <= 0: 
+                self.shoot()
 class PauseView(arcade.View):
     def __init__(self, game_view):
         super().__init__()
