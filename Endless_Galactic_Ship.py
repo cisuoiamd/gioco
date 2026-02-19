@@ -32,7 +32,7 @@ class GameView(arcade.View):
 
     def setup(self):
         self.background = arcade.load_texture("./assets/sfondo.png")
-        self.player_sprite = arcade.Sprite("./assets/shooter.png", scale=0.5)
+        self.player_sprite = arcade.Sprite("./assets/shooter.png", scale=0.45)
         self.player_sprite.center_x = 100
         self.player_sprite.center_y = HEIGHT // 2  
         self.player_list.clear()
