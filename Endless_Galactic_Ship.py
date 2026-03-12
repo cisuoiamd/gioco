@@ -3,9 +3,8 @@ import random
 import Health_bar
 from Nemicobase import Enemy
 
-WIDTH = 900  
-HEIGHT = 800  #modificare questo parametro per far spawnare i nemici + in alto (1079 per schermi da pc fissi, 800 per laptop) 
-#ATTENZIONE CHE ANCHE SU Nemiconbase.py ci sono parametri da modificare anche nella riga 140 0.15 per pc fissi, 0.4-5 per laptop
+WIDTH = 650  
+HEIGHT = 800
 class Ezuripresents(arcade.View):
     def __init__(self):
         super().__init__()
@@ -14,15 +13,13 @@ class Ezuripresents(arcade.View):
     def on_update(self, delta_time):
         self.timer += delta_time
         if self.timer >= 3.5:
-            arcade.stop_sound(self.Intro1) 
-            self.Intro1 = None 
             menu_view = MenuView()
             self.window.show_view(menu_view)
 
     def on_draw(self):
         self.clear()
         arcade.draw_text("Ezuri's Studios", WIDTH / 1, HEIGHT / 1.5,
-                         arcade.color.WHITE, font_size=200, anchor_x="center")
+                         arcade.color.WHITE, font_size=150, anchor_x="center")
         arcade.draw_text("Presents:", WIDTH / 1, HEIGHT / 2 - 125,
                          arcade.color.RED, font_size=50, anchor_x="center")
         arcade.draw_text("Click to skip", WIDTH / 1, HEIGHT / 2 - 500,
@@ -39,30 +36,30 @@ class MenuView(arcade.View):
 
     def on_show_view(self):
         self.window.background_color = arcade.color.BLACK
+    
     def on_draw(self):
         self.clear()
-        arcade.draw_text("ENDLESS GALACTIC SHIP", WIDTH / 1, HEIGHT / 1.3,
-                         arcade.color.PURPLE, font_size=120, anchor_x="center")
+        arcade.draw_text("ENDLESS GALACTIC SHIP", WIDTH / 1, HEIGHT / 1.5,
+                         arcade.color.PURPLE, font_size=95, anchor_x="center")
         arcade.draw_text("Click to advance", WIDTH / 1, HEIGHT / 2 - 255,
                          arcade.color.RED, font_size=20, anchor_x="center")
+                         
     def on_mouse_press(self, _x, _y, _button, _modifiers):
         instructions_view = InstructionView()
         self.window.show_view(instructions_view)
+        #donduz è stato qui (easter egg)
         arcade.stop_sound(self.Intro1) 
         self.Intro1 = None
 class InstructionView(arcade.View):
     def __init__(self):
         super().__init__()
-        Intro= arcade.load_sound("./assets/EndlessGalacticShipIntro.mp3")
-        self.Intro1 = Intro.play(volume=0)
     def on_show_view(self):
         self.window.background_color = arcade.color.BLACK
-
     def on_draw(self):
         self.clear()
         arcade.draw_text("Comands Screen for PC", WIDTH / 1, HEIGHT / 1.3,
-                         arcade.color.WHITE, font_size=100, anchor_x="center")
-        arcade.draw_text("Click to start the game", WIDTH / 1, HEIGHT / 2.2 - 400,
+                         arcade.color.YELLOW, font_size=95, anchor_x="center")
+        arcade.draw_text("Click to start the game", WIDTH / 1, HEIGHT / 2.2 - 330,
                          arcade.color.RED, font_size=30, anchor_x="center")
         arcade.draw_text("Fire = Left Mouse, SPACE", WIDTH / 1, HEIGHT / 2 +100,
                          arcade.color.WHITE, font_size=40, anchor_x="center")
@@ -74,7 +71,7 @@ class InstructionView(arcade.View):
                          arcade.color.WHITE, font_size=40, anchor_x="center")
         arcade.draw_text("Go Right: D", WIDTH / 1, HEIGHT / 2 -300,
                          arcade.color.WHITE, font_size=40, anchor_x="center")
-        
+
     def on_mouse_press(self, _x, _y, _button, _modifiers):
         game_view = GameView()
         self.window.show_view(game_view)
@@ -89,7 +86,7 @@ class GameOverView(arcade.View):
         arcade.draw_text(
             "Game Over",
             x=WIDTH / 1,
-            y=700,
+            y=550,
             color=arcade.color.WHITE,
             font_size=150,
             anchor_x="center"
@@ -97,14 +94,14 @@ class GameOverView(arcade.View):
         arcade.draw_text(
             "You Died",
             x=WIDTH / 1,
-            y=450,
+            y=300,
             color=arcade.color.RED,
             font_size=200,
             anchor_x="center"
         )
         arcade.draw_text("Press ENTER to restart",
          x=WIDTH / 1,
-            y=300,
+            y=170,
             color=arcade.color.WHITE,
             font_size=30,
             anchor_x="center"
@@ -124,11 +121,11 @@ class GameView(arcade.View):
         self.gameover = arcade.load_sound(path=("./assets/gameoversound.wav"))
         self.hurt = arcade.load_sound(path=("./assets/hurtsound.wav"))
         self.shoot_cooldown = 0.4  
-                
+
         self.shoot_timer = 0
         self.player_speed = 6
         self.bullet_speed = 12
-        
+
         self.change_x = 0
         self.change_y = 0
 
@@ -137,7 +134,7 @@ class GameView(arcade.View):
         self.barra = None
 
         self.enemy_spawn_timer = 0
-        self.enemy_spawn_interval = 0.5
+        self.enemy_spawn_interval = 0.3
         self.enemy_speed = 6
         self.lives = 1.0
         self.score = 0
