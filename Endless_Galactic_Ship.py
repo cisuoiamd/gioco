@@ -1,4 +1,4 @@
-import arcade    #arcade è una sorta di import per fare proprio i giochi 2d 
+import arcade
 import random
 import Health_bar    
 from Nemicobase import Enemy   #da nemicobase importa tutti i parametri di Enemy 
@@ -135,7 +135,7 @@ class GameOverView(arcade.View):
 class GameView(arcade.View):
     def __init__(self):
         super().__init__()
-        self.player_list = arcade.SpriteList()      # lista sprite del giocatore (di solito 1)
+        self.player_list = arcade.SpriteList()      # lista sprite del giocatore 
         self.bullet_list = arcade.SpriteList()      # tutti i proiettili
         self.enemy_list = arcade.SpriteList()       # tutti i nemici
 
@@ -240,7 +240,7 @@ class GameView(arcade.View):
         for enemy in self.enemy_list[:]:
             if arcade.check_for_collision(self.player_sprite, enemy):
                 arcade.play_sound(self.hurt)
-                self.lives -= 0.10
+                self.lives -= 0.125
                 if self.lives < 0:
                     self.lives = 0
                 enemy.remove_from_sprite_lists()        # nemico scompare dopo contatto
@@ -258,7 +258,7 @@ class GameView(arcade.View):
             return                                      # ancora in cooldown -> non spara
       
         self.shoot_timer = self.shoot_cooldown          # resetta timer cooldown
-  
+
         bullet = arcade.Sprite("./assets/laser.png", scale=0.17)
         bullet.center_x = self.player_sprite.center_x + 90
         bullet.center_y = self.player_sprite.center_y + 15
